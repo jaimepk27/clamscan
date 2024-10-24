@@ -1469,6 +1469,11 @@ class NodeClam {
                     }
                     return hasCb ? cb(err, null) : reject(err);
                 });
+                client.on('timeout', () => {
+                    if (this.settings.debugMode) console.log(`${this.debugLabel}: Socket/Host connection timed out.`);
+                    client.end();
+                    reject(new Error('Connection to host has timed out.'));
+                });
             } catch (err) {
                 return hasCb ? cb(err, false) : reject(err);
             }
